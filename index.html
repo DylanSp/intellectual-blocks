@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draggable Shape Tray</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+        
+        .instructions {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #3498db;
+            color: white;
+            border-radius: 4px;
+        }
+        
+        #workspace {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background: white;
+            border: 2px solid #ccc;
+            overflow: hidden;
+        }
+        
+        #tray {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #ddd;
+            border: 2px solid #999;
+            border-radius: 4px;
+            padding: 20px;
+            width: 600px;
+            height: 200px;
+        }
+        
+        .shape {
+            position: absolute;
+            display: inline-block;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .shape.in-workspace {
+            z-index: 10;
+        }
+        
+        .shape.picked-up {
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
+            cursor: move;
+            z-index: 1000;
+        }
+        
+        .square {
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(0,0,0,0.2);
+            box-sizing: border-box;
+        }
+        
+        /* Grid layouts for different shapes */
+        .z-shape { display: grid; grid-template-columns: repeat(3, 30px); }
+        .z-shape .square:nth-child(1) { grid-column: 1; grid-row: 1; }
+        .z-shape .square:nth-child(2) { grid-column: 2; grid-row: 1; }
+        .z-shape .square:nth-child(3) { grid-column: 2; grid-row: 2; }
+        .z-shape .square:nth-child(4) { grid-column: 3; grid-row: 2; }
+        
+        .square-2x2 { display: grid; grid-template-columns: repeat(2, 30px); }
+        
+        .t-shape { display: grid; grid-template-columns: repeat(3, 30px); }
+        .t-shape .square:nth-child(1) { grid-column: 1; grid-row: 1; }
+        .t-shape .square:nth-child(2) { grid-column: 2; grid-row: 1; }
+        .t-shape .square:nth-child(3) { grid-column: 3; grid-row: 1; }
+        .t-shape .square:nth-child(4) { grid-column: 2; grid-row: 2; }
+        
+        .line-3 { display: grid; grid-template-columns: repeat(3, 30px); }
+        
+        .line-2 { display: grid; grid-template-columns: repeat(2, 30px); }
+        
+        .l-shape-4 { display: grid; grid-template-columns: repeat(2, 30px); }
+        .l-shape-4 .square:nth-child(1) { grid-column: 1; grid-row: 1; }
+        .l-shape-4 .square:nth-child(2) { grid-column: 1; grid-row: 2; }
+        .l-shape-4 .square:nth-child(3) { grid-column: 1; grid-row: 3; }
+        .l-shape-4 .square:nth-child(4) { grid-column: 2; grid-row: 3; }
+        
+        .single { display: grid; grid-template-columns: 30px; }
+        
+        .l-shape-3 { display: grid; grid-template-columns: repeat(2, 30px); }
+        .l-shape-3 .square:nth-child(1) { grid-column: 1; grid-row: 1; }
+        .l-shape-3 .square:nth-child(2) { grid-column: 1; grid-row: 2; }
+        .l-shape-3 .square:nth-child(3) { grid-column: 2; grid-row: 2; }
+        
+        .line-4 { display: grid; grid-template-columns: repeat(4, 30px); }
+        
+        /* Shape colors */
+        .z-shape .square { background: #e74c3c; }
+        .square-2x2 .square { background: #2ecc71; }
+        .t-shape .square { background: #f1c40f; }
+        .line-3 .square { background: #e67e22; }
+        .line-2 .square { background: #8b4513; }
+        .l-shape-4 .square { background: #5dade2; }
+        .single .square { background: #34495e; }
+        .l-shape-3 .square { background: #9b59b6; }
+        .line-4 .square { background: #95a5a6; }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        Click any shape to pick it up, move your mouse to relocate it to the workspace, then click again to set it down.
+    </div>
+    
+    <div id="workspace">
+        <div id="tray">
+            <div class="shape z-shape" style="left: 10px; top: 10px;">
+                <div class="square"></div>
+                <div class="square"></div>
+                <div class="square"></div>
+                <div class="square"></div>
+            </div>
+            
+            <div class="shape square-2x2" style="left: 110px; top: 10px;">
+                <div class="square"></div>
+                <div class="square"></div>
+                <div class="square"></div>
+                <div class="square"></div>
+            </div>
+            
+            <div class="shape t-shape" style="left: 180px; top: 10px;">
+                <div class="square"></div>
+                <div class="square"></div>
+                <div class="square"></div>
+                <div class="square"></div>
+            </div>
+            
+            <div class="shape line-3" style="left: 280px; top: 10px;">
+                <div class="square"></div>
+                <div class="square"></div>
+                <div class="square"></div>
+            </div>
+            
+            <div class="shape line-2" style="left: 380px; top: 10px;">
+                <div class="square"></div>
+                <div class="square"></div>
+            </div>
+            
+            <div class="shape l-shape-4" style="left: 450px; top: 10px;">
+                <div class="square"></div>
+                <div class="square"></div>
+                <div class="square"></div>
+                <div class="square"></div>
+            </div>
+            
+            <div class="shape single" style="left: 520px; top: 10px;">
+                <div class="square"></div>
+            </div>
+            
+            <div class="shape l-shape-3" style="left: 10px; top: 110px;">
+                <div class="square"></div>
+                <div class="square"></div>
+                <div class="square"></div>
+            </div>
+            
+            <div class="shape line-4" style="left: 90px; top: 110px;">
+                <div class="square"></div>
+                <div class="square"></div>
+                <div class="square"></div>
+                <div class="square"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const workspace = document.getElementById('workspace');
+        const tray = document.getElementById('tray');
+        let pickedShape = null;
+        let offsetX = 0;
+        let offsetY = 0;
+        const shapeOriginalPositions = new Map();
+
+        // Initialize shapes - store original positions
+        document.querySelectorAll('.shape').forEach(shape => {
+            // Store original position
+            shapeOriginalPositions.set(shape, {
+                left: shape.style.left,
+                top: shape.style.top
+            });
+        });
+
+        // Handle shape clicks
+        document.addEventListener('click', function(e) {
+            const shape = e.target.closest('.shape');
+            
+            if (shape && !pickedShape) {
+                // Pick up the shape
+                pickedShape = shape;
+                pickedShape.classList.add('picked-up');
+                
+                const rect = shape.getBoundingClientRect();
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+                
+            } else if (pickedShape) {
+                // Set down the shape
+                pickedShape.classList.remove('picked-up');
+                pickedShape = null;
+            }
+        });
+
+        // Handle mouse movement
+        document.addEventListener('mousemove', function(e) {
+            if (pickedShape) {
+                // Move to workspace if not already there
+                if (!pickedShape.classList.contains('in-workspace')) {
+                    pickedShape.classList.add('in-workspace');
+                    const originalPos = shapeOriginalPositions.get(pickedShape);
+                    const trayRect = tray.getBoundingClientRect();
+                    const workspaceRect = workspace.getBoundingClientRect();
+                    
+                    // Convert tray-relative position to workspace-relative position
+                    const absoluteLeft = trayRect.left - workspaceRect.left + parseInt(originalPos.left);
+                    const absoluteTop = trayRect.top - workspaceRect.top + parseInt(originalPos.top);
+                    
+                    pickedShape.style.left = absoluteLeft + 'px';
+                    pickedShape.style.top = absoluteTop + 'px';
+                    
+                    workspace.appendChild(pickedShape);
+                }
+                
+                const workspaceRect = workspace.getBoundingClientRect();
+                let newX = e.clientX - workspaceRect.left - offsetX;
+                let newY = e.clientY - workspaceRect.top - offsetY;
+                
+                // Keep shape within workspace bounds
+                newX = Math.max(0, Math.min(newX, workspace.clientWidth - pickedShape.offsetWidth));
+                newY = Math.max(0, Math.min(newY, workspace.clientHeight - pickedShape.offsetHeight));
+                
+                pickedShape.style.left = newX + 'px';
+                pickedShape.style.top = newY + 'px';
+            }
+        });
+    </script>
+</body>
+</html>
