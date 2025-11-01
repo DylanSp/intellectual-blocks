@@ -34,18 +34,18 @@ body {
   height: 200px;
 }
 
-.shape {
+.piece {
   position: absolute;
   display: inline-block;
   cursor: pointer;
   transition: transform 0.2s;
 }
 
-.shape.in-workspace {
+.piece.in-workspace {
   z-index: 10;
 }
 
-.shape.picked-up {
+.piece.picked-up {
   filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
   cursor: move;
   z-index: 1000;
@@ -59,136 +59,136 @@ body {
 }
 
 /* Grid layouts for different shapes */
-.z-shape {
+.z-piece {
   display: grid;
   grid-template-columns: repeat(3, 30px);
 }
-.z-shape .square:nth-child(1) {
+.z-piece .square:nth-child(1) {
   grid-column: 1;
   grid-row: 1;
 }
-.z-shape .square:nth-child(2) {
+.z-piece .square:nth-child(2) {
   grid-column: 2;
   grid-row: 1;
 }
-.z-shape .square:nth-child(3) {
+.z-piece .square:nth-child(3) {
   grid-column: 2;
   grid-row: 2;
 }
-.z-shape .square:nth-child(4) {
+.z-piece .square:nth-child(4) {
   grid-column: 3;
   grid-row: 2;
 }
 
-.square-2x2 {
+.square-piece {
   display: grid;
   grid-template-columns: repeat(2, 30px);
 }
 
-.t-shape {
+.t-piece {
   display: grid;
   grid-template-columns: repeat(3, 30px);
 }
-.t-shape .square:nth-child(1) {
+.t-piece .square:nth-child(1) {
   grid-column: 1;
   grid-row: 1;
 }
-.t-shape .square:nth-child(2) {
+.t-piece .square:nth-child(2) {
   grid-column: 2;
   grid-row: 1;
 }
-.t-shape .square:nth-child(3) {
+.t-piece .square:nth-child(3) {
   grid-column: 3;
   grid-row: 1;
 }
-.t-shape .square:nth-child(4) {
+.t-piece .square:nth-child(4) {
   grid-column: 2;
   grid-row: 2;
 }
 
-.line-3 {
+.line-2-piece {
+  display: grid;
+  grid-template-columns: repeat(2, 30px);
+}
+
+.line-3-piece {
   display: grid;
   grid-template-columns: repeat(3, 30px);
 }
 
-.line-2 {
-  display: grid;
-  grid-template-columns: repeat(2, 30px);
-}
-
-.l-shape-4 {
-  display: grid;
-  grid-template-columns: repeat(2, 30px);
-}
-.l-shape-4 .square:nth-child(1) {
-  grid-column: 1;
-  grid-row: 1;
-}
-.l-shape-4 .square:nth-child(2) {
-  grid-column: 1;
-  grid-row: 2;
-}
-.l-shape-4 .square:nth-child(3) {
-  grid-column: 1;
-  grid-row: 3;
-}
-.l-shape-4 .square:nth-child(4) {
-  grid-column: 2;
-  grid-row: 3;
-}
-
-.single {
-  display: grid;
-  grid-template-columns: 30px;
-}
-
-.l-shape-3 {
-  display: grid;
-  grid-template-columns: repeat(2, 30px);
-}
-.l-shape-3 .square:nth-child(1) {
-  grid-column: 1;
-  grid-row: 1;
-}
-.l-shape-3 .square:nth-child(2) {
-  grid-column: 1;
-  grid-row: 2;
-}
-.l-shape-3 .square:nth-child(3) {
-  grid-column: 2;
-  grid-row: 2;
-}
-
-.line-4 {
+.line-4-piece {
   display: grid;
   grid-template-columns: repeat(4, 30px);
 }
 
+.l-piece {
+  display: grid;
+  grid-template-columns: repeat(2, 30px);
+}
+.l-piece .square:nth-child(1) {
+  grid-column: 1;
+  grid-row: 1;
+}
+.l-piece .square:nth-child(2) {
+  grid-column: 1;
+  grid-row: 2;
+}
+.l-piece .square:nth-child(3) {
+  grid-column: 1;
+  grid-row: 3;
+}
+.l-piece .square:nth-child(4) {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.single-square-piece {
+  display: grid;
+  grid-template-columns: 30px;
+}
+
+.corner-3-piece {
+  display: grid;
+  grid-template-columns: repeat(2, 30px);
+}
+.corner-3-piece .square:nth-child(1) {
+  grid-column: 1;
+  grid-row: 1;
+}
+.corner-3-piece .square:nth-child(2) {
+  grid-column: 1;
+  grid-row: 2;
+}
+.corner-3-piece .square:nth-child(3) {
+  grid-column: 2;
+  grid-row: 2;
+}
+
 /* Shape colors */
-.z-shape .square {
+.z-piece .square {
   background: #e74c3c;
 }
-.square-2x2 .square {
+.square-piece .square {
   background: #2ecc71;
 }
-.t-shape .square {
+.t-piece .square {
   background: #f1c40f;
 }
-.line-3 .square {
-  background: #e67e22;
-}
-.line-2 .square {
+.line-2-piece .square {
   background: #8b4513;
 }
-.l-shape-4 .square {
+.line-3-piece .square {
+  background: #e67e22;
+}
+.line-4-piece .square {
+  background: #95a5a6;
+}
+.l-piece .square {
   background: #5dade2;
 }
-.single .square {
+.single-square-piece .square {
   background: #34495e;
 }
-.l-shape-3 .square {
+.corner-3-piece .square {
   background: #9b59b6;
-}
-.line-4 .square {
-  background: #95a5a6;
 }
