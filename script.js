@@ -73,3 +73,37 @@ document.addEventListener("mousemove", function (e) {
     pickedShape.style.top = newY + "px";
   }
 });
+
+function randomBlockers() {
+  const dice = [
+    ["A6", "A6", "A6", "F1", "F1", "F1"],
+    ["D3", "B4", "C3", "C4", "E3", "D4"],
+    ["D1", "D2", "F3", "A1", "E2", "C1"],
+    ["B1", "B2", "B3", "A2", "A3", "C2"],
+    ["E4", "E5", "F5", "E6", "D5", "F4"],
+    ["B5", "C5", "F6", "D6", "A4", "C6"],
+    ["A5", "F2", "A5", "F2", "B6", "E1"],
+  ];
+
+  function rollDie(die) {
+    return die[Math.floor(Math.random() * 6)];
+  }
+
+  function parseDieResult(result) {
+    const rowName = result[0];
+    const colName = result[1];
+
+    const row = rowName.charCodeAt(0) - "A".charCodeAt(0);
+    const col = Number.parseInt(colName, 10) - 1; // subtract 1 to convert to 0-indexed
+
+    return [row, col];
+  }
+
+  let blockerPositions = [];
+  for (const die of dice) {
+    const [row, col] = parseDieResult(rollDie(die));
+    blockerPositions.push([row, col]);
+  }
+
+  return blockerPositions;
+}
