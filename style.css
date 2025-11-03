@@ -34,6 +34,39 @@ body {
   height: 200px;
 }
 
+#puzzle-grid {
+  position: absolute;
+  top: 260px;
+  left: 20px;
+  display: grid;
+  grid-template-columns: 40px repeat(6, 30px);
+  grid-template-rows: 40px repeat(6, 30px);
+  background: black;
+  gap: 1px;
+  padding: 1px;
+}
+
+.grid-label {
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.grid-corner {
+  background: white;
+}
+
+.grid-cell {
+  background: white;
+}
+
+.grid-cell.highlight {
+  background: #a8d5ff;
+}
+
 .piece {
   position: absolute;
   display: inline-block;
