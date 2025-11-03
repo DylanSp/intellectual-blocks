@@ -197,6 +197,13 @@ body {
   grid-row: 2;
 }
 
+.blocker {
+  width: 30px;
+  height: 30px;
+  background: tan;
+  border-radius: 50%;
+}
+
 /* Shape colors */
 .z-piece .square {
   background: #e74c3c;
