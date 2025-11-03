@@ -1,3 +1,5 @@
+const GRID_SIZE = 6; // puzzle grid is GRID_SIZE x GRID_SIZE
+
 const workspace = document.getElementById("workspace");
 const tray = document.getElementById("tray");
 let pickedShape = null;
@@ -74,6 +76,10 @@ document.addEventListener("mousemove", function (e) {
   }
 });
 
+// in-memory state; source of truth, render from this
+// TODO - save to localStorage to persist on reloads?
+let puzzleGridState = [];
+
 function randomBlockers() {
   const dice = [
     ["A6", "A6", "A6", "F1", "F1", "F1"],
@@ -107,3 +113,78 @@ function randomBlockers() {
 
   return blockerPositions;
 }
+
+function setupBlockers() {
+  // TODO - load from URL/localStorage?
+  const blockerPositions = randomBlockers();
+
+  for (const [blockerRow, blockerCol] of blockerPositions) {
+    puzzleGridState[blockerRow][blockerCol] = "blocker";
+  }
+}
+
+function initializeState() {
+  puzzleGridState = new Array(6);
+  for (let row = 0; row < 6; row++) {
+    puzzleGridState[row] = new Array(6);
+
+    for (let col = 0; col < 6; col++) {
+      puzzleGridState[row][col] = "empty";
+    }
+  }
+
+  setupBlockers();
+}
+initializeState();
+
+function renderPuzzleGrid() {
+  const container = document.getElementById("puzzle-grid");
+
+  const newChildren = [];
+
+  // set up corner
+  const corner = document.createElement("div");
+  corner.className = "grid-corner";
+  newChildren.push(corner);
+
+  // set up column labels
+  for (let col = 0; col < GRID_SIZE; col++) {
+    const columnLabel = document.createElement("div");
+    columnLabel.className = "grid-label";
+    columnLabel.innerText = (col + 1).toString(10);
+    newChildren.push(columnLabel);
+  }
+
+  // set up rows, starting each row with a label
+  for (let row = 0; row < GRID_SIZE; row++) {
+    const rowLabel = document.createElement("div");
+    rowLabel.className = "grid-label";
+    rowLabel.innerText = String.fromCharCode("A".charCodeAt(0) + row);
+    newChildren.push(rowLabel);
+
+    // set up grid cells
+    for (let col = 0; col < GRID_SIZE; col++) {
+      const cell = document.createElement("div");
+      cell.className = "grid-cell";
+
+      switch (puzzleGridState[row][col]) {
+        case "empty":
+          // intentional no-op
+          break;
+        case "blocker":
+          const blocker = document.createElement("div");
+          blocker.className = "blocker";
+          cell.appendChild(blocker);
+      }
+
+      newChildren.push(cell);
+    }
+  }
+
+  container.replaceChildren(...newChildren);
+}
+
+// temp - for testing
+document
+  .getElementById("renderBtn")
+  .addEventListener("click", renderPuzzleGrid);
