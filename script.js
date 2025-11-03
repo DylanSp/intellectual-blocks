@@ -167,6 +167,10 @@ function renderPuzzleGrid() {
       const cell = document.createElement("div");
       cell.className = "grid-cell";
 
+      // set data-row and data-col attributes so we can map DOM elements back to grid coordinates
+      cell.dataset.row = row.toString(10);
+      cell.dataset.col = col.toString(10);
+
       switch (puzzleGridState[row][col]) {
         case "empty":
           // intentional no-op
