@@ -1,11 +1,73 @@
 const GRID_SIZE = 6; // puzzle grid is GRID_SIZE x GRID_SIZE
 
+// TODO - calculate these dynamically instead of using fixed sizes?
+const GRID_START_X = 20 + 1 + 40; // grid left + padding + label width
+const GRID_START_Y = 260 + 1 + 40; // grid top + padding + label height
+const GRID_SQUARE_SIZE = 30;
+
 const workspace = document.getElementById("workspace");
 const tray = document.getElementById("tray");
 let pickedPiece = null;
 let offsetX = 0;
 let offsetY = 0;
 const pieceOriginalPositions = new Map();
+
+// which cells are occupied relative to top-left of piece
+// TODO - how to account for rotations/flips? expand this lookup table, or use a different approach?
+const piecePatterns = {
+  "z-piece": [
+    { row: 0, col: 0 },
+    { row: 0, col: 1 },
+    { row: 1, col: 1 },
+    { row: 1, col: 2 },
+  ],
+  "square-piece": [
+    { row: 0, col: 0 },
+    { row: 0, col: 1 },
+    { row: 1, col: 0 },
+    { row: 1, col: 1 },
+  ],
+  "t-piece": [
+    { row: 0, col: 0 },
+    { row: 0, col: 1 },
+    { row: 0, col: 2 },
+    { row: 1, col: 1 },
+  ],
+  "line-2-piece": [
+    { row: 0, col: 0 },
+    { row: 0, col: 1 },
+  ],
+  "line-3-piece": [
+    { row: 0, col: 0 },
+    { row: 0, col: 1 },
+    { row: 0, col: 2 },
+  ],
+  "line-4-piece": [
+    { row: 0, col: 0 },
+    { row: 0, col: 1 },
+    { row: 0, col: 2 },
+    { row: 0, col: 3 },
+  ],
+  "l-piece": [
+    { row: 0, col: 0 },
+    { row: 1, col: 0 },
+    { row: 2, col: 0 },
+    { row: 2, col: 1 },
+  ],
+  "single-square-piece": [{ row: 0, col: 0 }],
+  "corner-3-piece": [
+    { row: 0, col: 0 },
+    { row: 1, col: 0 },
+    { row: 1, col: 1 },
+  ],
+};
+
+// Convert workspace coordinates to grid position
+function getGridPosition(x, y) {
+  const col = Math.floor((x - GRID_START_X) / GRID_SQUARE_SIZE);
+  const row = Math.floor((y - GRID_START_Y) / GRID_SQUARE_SIZE);
+  return { row, col };
+}
 
 // Initialize shapes - store original positions
 document.querySelectorAll(".piece").forEach((piece) => {
@@ -21,7 +83,7 @@ document.addEventListener("click", function (e) {
   const piece = e.target.closest(".piece");
 
   if (piece && !pickedPiece) {
-    // Pick up the shape
+    // Pick up the piece
     pickedPiece = piece;
     pickedPiece.classList.add("picked-up");
 
@@ -29,8 +91,21 @@ document.addEventListener("click", function (e) {
     offsetX = e.clientX - rect.left;
     offsetY = e.clientY - rect.top;
   } else if (pickedPiece) {
-    // Set down the shape
+    // Set down the piece
     pickedPiece.classList.remove("picked-up");
+
+    // check if piece is over the grid; if it is, snap to the grid
+    const workspaceRect = workspace.getBoundingClientRect();
+    const pieceX = e.clientX - workspaceRect.left - offsetX;
+    const pieceY = e.clientY - workspaceRect.top - offsetY;
+
+    const { row, col } = getGridPosition(pieceX, pieceY);
+
+    if (row >= 0 && row < GRID_SIZE && col >= 0 && col < GRID_SIZE) {
+      pickedShape.style.left = `${GRID_START_X}${col * GRID_SQUARE_SIZE}px`;
+      pickedShape.style.top = `${GRID_START_Y}${row * GRID_SQUARE_SIZE}px`;
+    }
+
     pickedPiece = null;
   }
 });

@@ -63,6 +63,7 @@ body {
   background: white;
 }
 
+/* Used when dragging piece onto grid */
 .grid-cell.highlight {
   background: #a8d5ff;
 }
